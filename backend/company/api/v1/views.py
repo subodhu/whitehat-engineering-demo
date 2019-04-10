@@ -13,17 +13,6 @@ class CompanyViewSet(ModelViewSet):
     serializer_class = CompanySerializer
 
 
-class EmployeeList(ListAPIView):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if self.kwargs.get('company'):
-            qs = qs.filter(company_id=self.kwargs.get('company'))
-        return qs
-
-
 class EmployeeViewSet(ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -40,6 +29,13 @@ class EmployeeViewSet(ModelViewSet):
     def get_company_employees(self, request, company_id, pk=None):
         qs = self.get_queryset().filter(company_id=company_id)
         serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='manager/(?P<manager_id>\d+)')
+    def get_employees_of_manager(self, request, manager_id, pk=None):
+        qs = self.get_queryset().filter(manager_id=manager_id)
+        serializer = self.get_serializer(qs, many=True)
+        print(serializer.data, "DJFLDFKLDFK")
         return Response(serializer.data)
 
 
