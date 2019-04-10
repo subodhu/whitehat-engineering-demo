@@ -21,6 +21,7 @@ class App extends Component {
                     <div id="main-body">
                         <Route path="/companies" exact component={Companies}/>
                         <Route path="/employees" exact component={Employees}/>
+                        <Route path="/employees/manager/:mangerID" exact component={Employees}/>
                         <Route path="/company/employees/:companyID" exact component={Employees}/>
                         <Route path="/company/add" exact component={CompanyForm}/>
                         <Route path="/company/update/:companyID" exact component={CompanyForm}/>

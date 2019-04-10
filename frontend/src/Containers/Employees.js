@@ -7,6 +7,19 @@ import {Link} from "react-router-dom";
 import Card from '../Components/Card';
 
 
+class ShowEmployeeOfManagerButton extends Component {
+
+    render() {
+        const managerEmployeeUrl = this.props.managerEmployeeUrl;
+        return <Link to={managerEmployeeUrl} className="button is-primary is-outlined is-small" title={"Show Employees"}>
+            <span className="icon is-small">
+                <i className="fas fa-list"></i>
+            </span>
+        </Link>
+    }
+}
+
+
 class ChangeManagerButton extends Component {
 
     render() {
@@ -28,6 +41,8 @@ class EmployeeRow extends Component {
         const editUrl = '/employee/update/' + employee.id;
         const deleteUrl = '/employee/delete/' + employee.id;
         const changeManagerUrl = '/change/manager/' + employee.id;
+        const managerEmployeeUrl = '/employees/manager/' + employee.id;
+
         return (
             <tr>
                 <td>{employee.first_name + ' ' + employee.last_name}</td>
@@ -47,6 +62,7 @@ class EmployeeRow extends Component {
                     <div className={"buttons"}>
                         <EditButton editUrl={editUrl}/>
                         <DeleteButton deleteUrl={deleteUrl}/>
+                        <ShowEmployeeOfManagerButton managerEmployeeUrl={managerEmployeeUrl}/>
                     </div>
                 </td>
             </tr>
@@ -121,10 +137,16 @@ class Employees extends Component {
 
     componentDidMount() {
         const companyId = this.props.match.params.companyID;
+        const mangerID = this.props.match.params.mangerID;
         let url = process.env.REACT_APP_BASE_API_URL + 'employee/';
-        if (companyId) {
+
+        if (mangerID) {
+            url += 'manager/' + mangerID + '/';
+        }
+        else if (companyId) {
             url += 'company/' + companyId + '/';
         }
+
         fetch(url)
             .then(function (response) {
                 return response.json();
